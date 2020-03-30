@@ -5,6 +5,12 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
+#define MAX 650
+#define MAX_RES 10
+
+char *PalabrasReservadas[MAX_RES] = {"entero", "decimal", "boolean", "cadena", "si", "sino", "mientras", "hacer", "verdadero", "falso"};
+//unsigned char entrada[MAX];
+//char *p;
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -29,11 +35,35 @@ void Widget::on_pushButton_clicked(){
     }
     QTextStream in(&file);
     QString texto = in.readAll();
-    ui->textoPlano->setPlainText(texto);
+    ui->tpCodigo->setPlainText(texto);
     file.close();
 }
 
-void Widget::on_btnAbrirArchivo_clicked()
+
+void Widget::on_btnRun_clicked()
 {
 
+    //Declaracion de String con el contenido del plaintextedit
+    QString text = ui->tpCodigo->toPlainText();
+    QString miComando;
+    QString miValor;
+    QString xLinea;
+    QString otra;
+
+    QStringList lineas = text.split(";", QString::SkipEmptyParts); //partimos el texto por cada linea
+    QStringList palabra;
+    static int i = 0;
+    xLinea = lineas.at(i); //No deja picar la linea en este mismo paso
+
+    palabra = xLinea.split(",", QString::SkipEmptyParts); //picando la linea por palabras
+    miComando = palabra.at(0); //tomando la primera palabra
+    miValor = palabra.at(1); //tomando la segunda palabra
+    otra = palabra.at(2);
+
+    ui->ptTokensError->setPlainText(QString::number(i+1));
+    ui->ptTokens->setPlainText(miComando);
+    ui->ptTokensError->appendPlainText(miValor);
+    ui->ptTemporal->setPlainText(otra);
+    if((i >= 0) && (i < lineas.count())) i++;
+    if(i >= lineas.count()) i = 0;
 }

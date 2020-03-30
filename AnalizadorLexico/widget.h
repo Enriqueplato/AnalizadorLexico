@@ -18,7 +18,7 @@ public:
 private slots:
     void on_pushButton_clicked();
 
-    void on_btnAbrirArchivo_clicked();
+    void on_btnRun_clicked();
 
 private:
     Ui::Widget *ui;
